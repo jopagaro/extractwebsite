@@ -1,88 +1,87 @@
 import { useRef, useMemo } from 'react'
 import { Canvas, useFrame } from '@react-three/fiber'
-import { Sphere } from '@react-three/drei'
 import * as THREE from 'three'
 import * as d3geo from 'd3-geo'
 import { feature } from 'topojson-client'
 import type { Topology, GeometryCollection } from 'topojson-specification'
-// @ts-ignore — world-atlas has no type declarations
+// @ts-ignore
 import worldData from 'world-atlas/countries-110m.json'
 
-function buildGlobeTexture(): THREE.CanvasTexture {
-  const W = 2048
-  const H = 1024
-  const canvas = document.createElement('canvas')
-  canvas.width = W
-  canvas.height = H
-  const ctx = canvas.getContext('2d')!
+const RADIUS = 1.55
+const DOT_SIZE = 0.013
+const GRID_DEG = 2.2   // degrees between dot samples
 
-  // Ocean — bone dark
-  ctx.fillStyle = '#EAE4D6'
-  ctx.fillRect(0, 0, W, H)
-
-  // Land — stone color
-  const projection = d3geo
-    .geoEquirectangular()
-    .scale(H / Math.PI)
-    .translate([W / 2, H / 2])
-
-  const path = d3geo.geoPath(projection, ctx)
-
-  const countries = feature(
-    worldData as unknown as Topology,
-    worldData.objects.countries as GeometryCollection
-  )
-
-  ctx.beginPath()
-  path(countries)
-  ctx.fillStyle = '#9E9890'
-  ctx.fill()
-
-  // Subtle country borders
-  ctx.beginPath()
-  path(countries)
-  ctx.strokeStyle = '#CEC8BA'
-  ctx.lineWidth = 1.2
-  ctx.stroke()
-
-  return new THREE.CanvasTexture(canvas)
+function latLonTo3D(lat: number, lon: number, r: number): [number, number, number] {
+  const phi   = (90 - lat)  * (Math.PI / 180)
+  const theta = (lon + 180) * (Math.PI / 180)
+  return [
+    -r * Math.sin(phi) * Math.cos(theta),
+     r * Math.cos(phi),
+     r * Math.sin(phi) * Math.sin(theta),
+  ]
 }
 
-function GlobeModel() {
-  const groupRef = useRef<THREE.Group>(null)
-  const texture = useMemo(() => buildGlobeTexture(), [])
-
-  useFrame((_, delta) => {
-    if (groupRef.current) {
-      groupRef.current.rotation.y += delta * 0.16
+function useLandPositions() {
+  return useMemo(() => {
+    const land = feature(
+      worldData as unknown as Topology,
+      (worldData as { objects: { land: GeometryCollection } }).objects.land as GeometryCollection
+    )
+    const pts: [number, number, number][] = []
+    for (let lat = -90; lat <= 90; lat += GRID_DEG) {
+      for (let lon = -180; lon <= 180; lon += GRID_DEG) {
+        if (d3geo.geoContains(land, [lon, lat])) {
+          pts.push(latLonTo3D(lat, lon, RADIUS))
+        }
+      }
     }
+    return pts
+  }, [])
+}
+
+function GlobeScene() {
+  const groupRef = useRef<THREE.Group>(null)
+  const landPts   = useLandPositions()
+
+  const dotGeo = useMemo(() => new THREE.SphereGeometry(DOT_SIZE, 5, 5), [])
+  const dotMat = useMemo(() => new THREE.MeshBasicMaterial({ color: '#7A7068' }), [])
+
+  const instanced = useMemo(() => {
+    const mesh = new THREE.InstancedMesh(dotGeo, dotMat, landPts.length)
+    const m = new THREE.Matrix4()
+    landPts.forEach(([x, y, z], i) => {
+      m.setPosition(x, y, z)
+      mesh.setMatrixAt(i, m)
+    })
+    mesh.instanceMatrix.needsUpdate = true
+    return mesh
+  }, [landPts, dotGeo, dotMat])
+
+  useFrame((_, dt) => {
+    if (groupRef.current) groupRef.current.rotation.y += dt * 0.14
   })
 
   return (
     <group ref={groupRef}>
-      {/* Textured sphere — land masses */}
-      <Sphere args={[1.6, 64, 40]}>
-        <meshStandardMaterial
-          map={texture}
-          roughness={1}
-          metalness={0}
-        />
-      </Sphere>
+      {/* Subtle ocean sphere */}
+      <mesh>
+        <sphereGeometry args={[RADIUS, 64, 40]} />
+        <meshBasicMaterial color="#E8E2D6" transparent opacity={0.18} />
+      </mesh>
 
-      {/* Wireframe overlay for the grid effect */}
-      <Sphere args={[1.605, 28, 18]}>
-        <meshBasicMaterial
-          color="#CEC8BA"
-          wireframe
-          transparent
-          opacity={0.25}
-        />
-      </Sphere>
+      {/* Land dots */}
+      <primitive object={instanced} />
+
+      {/* Grid lines */}
+      <mesh>
+        <sphereGeometry args={[RADIUS + 0.003, 26, 16]} />
+        <meshBasicMaterial color="#CEC8BA" wireframe transparent opacity={0.18} />
+      </mesh>
 
       {/* Equatorial ring */}
       <mesh rotation={[Math.PI / 2, 0, 0]}>
-        <torusGeometry args={[1.62, 0.004, 2, 100]} />
-        <meshBasicMaterial color="#9E9890" transparent opacity={0.6} />
+        <torusGeometry args={[RADIUS + 0.012, 0.004, 2, 120]} />
+        <meshBasicMaterial color="#B0A898" transparent opacity={0.5} />
       </mesh>
     </group>
   )
@@ -90,14 +89,14 @@ function GlobeModel() {
 
 export default function Globe() {
   return (
-    <Canvas
-      camera={{ position: [0, 0, 4.2], fov: 38 }}
-      style={{ background: 'transparent' }}
-      gl={{ alpha: true, antialias: true }}
-    >
-      <ambientLight intensity={1.2} />
-      <directionalLight position={[4, 2, 4]} intensity={0.4} />
-      <GlobeModel />
-    </Canvas>
+    <div style={{ width: '100%', height: '100%', position: 'relative' }}>
+      <Canvas
+        camera={{ position: [0, 0, 4.0], fov: 40 }}
+        gl={{ alpha: true, antialias: true }}
+        style={{ position: 'absolute', inset: 0 }}
+      >
+        <GlobeScene />
+      </Canvas>
+    </div>
   )
 }

@@ -213,11 +213,10 @@ a {
 }
 
 .hero-right {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   position: relative;
-  height: 420px;
+  height: 480px;
+  min-width: 0;
+  overflow: hidden;
 }
 
 /* ─── File type tags ─────────────────────────────────────────────────────── */
@@ -644,8 +643,9 @@ a {
   }
 
   .hero-right {
-    height: 300px;
+    height: 320px;
     order: -1;
+    overflow: hidden;
   }
 
   .two-col {
