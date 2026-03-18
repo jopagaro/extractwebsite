@@ -214,9 +214,10 @@ a {
 
 .hero-right {
   position: relative;
-  height: 480px;
+  height: 520px;
   min-width: 0;
-  overflow: hidden;
+  display: flex;
+  align-items: stretch;
 }
 
 /* ─── File type tags ─────────────────────────────────────────────────────── */
@@ -619,6 +620,131 @@ a {
   font-size: 10px;
   letter-spacing: 0.1em;
   color: var(--rule);
+}
+
+/* ─── Drill hole animation ───────────────────────────────────────────────── */
+
+.drill-wrap {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px 40px 40px;
+}
+
+.drill-svg {
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.drill-band {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
+.drill-band.visible {
+  opacity: 1;
+}
+
+.drill-bit {
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+
+.drill-bit.visible {
+  opacity: 1;
+  animation: bitDrop 2.8s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+}
+
+@keyframes bitDrop {
+  from { transform: translateY(-440px); }
+  to   { transform: translateY(0); }
+}
+
+/* ─── Section depth labels ───────────────────────────────────────────────── */
+
+.section-depth {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 48px;
+}
+
+.section-depth-val {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--stone);
+  letter-spacing: 0.14em;
+}
+
+.section-depth-layer {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.26em;
+  text-transform: uppercase;
+  color: var(--rule);
+}
+
+/* ─── Fixed scroll depth counter ────────────────────────────────────────── */
+
+.scroll-depth {
+  position: fixed;
+  right: 24px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 50;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+}
+
+.scroll-depth--visible {
+  opacity: 1;
+}
+
+.scroll-depth-line {
+  width: 1px;
+  height: 32px;
+  background: var(--rule);
+  display: block;
+}
+
+.scroll-depth-line--grow {
+  height: 48px;
+}
+
+.scroll-depth-val {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--stone);
+  letter-spacing: 0.12em;
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+}
+
+.scroll-depth-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--rule);
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+}
+
+.waitlist-confirm {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--stone);
 }
 
 /* ─── Scroll animations ──────────────────────────────────────────────────── */
