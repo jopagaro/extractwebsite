@@ -88,15 +88,6 @@ const FAQ_ITEMS = [
 
 const FILE_TYPES = ['PDF', 'DXF', 'DWG', 'CSV', 'XLS', 'TIF', 'PNG', 'JPG', 'SHP', 'LAS', 'DAT', 'XML']
 
-// Geological depth motif — each section is a layer deeper
-const SECTION_DEPTHS = [
-  { id: 'about',        depth: '— 45m',   layer: 'Weathered Zone'  },
-  { id: 'features',     depth: '— 120m',  layer: 'Transition'      },
-  { id: 'how-it-works', depth: '— 240m',  layer: 'Oxide'           },
-  { id: 'output',       depth: '— 390m',  layer: 'Sulphide'        },
-  { id: 'faq',          depth: '— 580m',  layer: 'Primary Ore'     },
-  { id: 'waitlist',     depth: '— 820m',  layer: 'High Grade Zone' },
-]
 
 function useReveal() {
   useEffect(() => {
@@ -115,17 +106,6 @@ function useReveal() {
     els.forEach((el) => observer.observe(el))
     return () => observer.disconnect()
   }, [])
-}
-
-function SectionDepth({ id }: { id: string }) {
-  const info = SECTION_DEPTHS.find((s) => s.id === id)
-  if (!info) return null
-  return (
-    <div className="section-depth" aria-hidden="true">
-      <span className="section-depth-val">{info.depth}</span>
-      <span className="section-depth-layer">{info.layer.toUpperCase()}</span>
-    </div>
-  )
 }
 
 export default function App() {
@@ -200,7 +180,6 @@ export default function App() {
 
           {/* ── What It Is ──────────────────────────────────────────────── */}
           <section className="section reveal" id="about">
-            <SectionDepth id="about" />
             <div className="two-col">
               <span className="label">What It Is</span>
               <div className="body-copy">
@@ -227,7 +206,6 @@ export default function App() {
 
           {/* ── Features ────────────────────────────────────────────────── */}
           <section className="section" id="features">
-            <SectionDepth id="features" />
             <span className="label">What You Can Feed It</span>
             <div className="feature-grid">
               {FEATURES.map((f, i) => (
@@ -242,7 +220,6 @@ export default function App() {
 
           {/* ── How It Works ────────────────────────────────────────────── */}
           <section className="section reveal" id="how-it-works">
-            <SectionDepth id="how-it-works" />
             <span className="label">How It Works</span>
             <ul className="step-list">
               {STEPS.map((s) => (
@@ -257,7 +234,6 @@ export default function App() {
 
           {/* ── Output ──────────────────────────────────────────────────── */}
           <section className="section reveal" id="output">
-            <SectionDepth id="output" />
             <div className="two-col">
               <span className="label">The Output</span>
               <div className="output-wrap">
@@ -327,7 +303,6 @@ export default function App() {
 
           {/* ── FAQ ─────────────────────────────────────────────────────── */}
           <section className="section reveal" id="faq">
-            <SectionDepth id="faq" />
             <div className="two-col">
               <span className="label">FAQ</span>
               <Accordion items={FAQ_ITEMS} />
@@ -340,7 +315,6 @@ export default function App() {
             id="waitlist"
             ref={waitlistRef}
           >
-            <SectionDepth id="waitlist" />
             <h2 className="cta-headline">
               Be first when<br />Extract ships.
             </h2>
