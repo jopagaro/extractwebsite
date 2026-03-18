@@ -167,15 +167,7 @@ a {
   padding-top: clamp(120px, 16vw, 180px);
   padding-bottom: clamp(80px, 10vw, 128px);
   border-bottom: 1px solid var(--rule);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 40px;
-  align-items: center;
-}
-
-.hero-left {
-  display: flex;
-  flex-direction: column;
+  max-width: 680px;
 }
 
 .hero-eyebrow {

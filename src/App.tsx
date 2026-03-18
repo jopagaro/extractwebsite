@@ -1,6 +1,4 @@
 import { useEffect, useRef, useState } from 'react'
-import DrillHole from './components/DrillHole'
-import ScrollDepth from './components/ScrollDepth'
 import Accordion from './components/Accordion'
 import './index.css'
 
@@ -148,8 +146,6 @@ export default function App() {
 
   return (
     <>
-      <ScrollDepth />
-
       {/* ── Nav ─────────────────────────────────────────────────────── */}
       <nav className="nav">
         <div className="nav-inner">
@@ -169,39 +165,34 @@ export default function App() {
 
         {/* ── Hero ────────────────────────────────────────────────────── */}
         <header className="hero">
-          <div className="hero-left">
-            <span className="hero-eyebrow">Mining Intelligence — Desktop App</span>
-            <h1 className="hero-headline fade-up d1">
-              Your personal<br />
-              mining engineer.<br />
-              On your machine.
-            </h1>
-            <p className="hero-sub fade-up d2">
-              Upload any file from any mine — drill holes, financials,
-              satellite imagery, CAD drawings, permits, photographs.
-              Extract reads all of it and delivers a complete engineering
-              and commercial assessment.
-            </p>
-            <div className="hero-actions fade-up d3">
-              <button className="btn btn-primary btn-lg" onClick={scrollToWaitlist}>
-                Join the Waitlist
-              </button>
-              <button
-                className="btn btn-lg"
-                disabled
-                style={{ opacity: 0.5, cursor: 'default' }}
-              >
-                macOS &amp; Windows — Coming Soon
-              </button>
-            </div>
-            <div className="file-tags fade-up d4">
-              {FILE_TYPES.map((f) => (
-                <span key={f} className="file-tag">{f}</span>
-              ))}
-            </div>
+          <span className="hero-eyebrow">Mining Intelligence — Desktop App</span>
+          <h1 className="hero-headline fade-up d1">
+            Your personal<br />
+            mining engineer.<br />
+            On your machine.
+          </h1>
+          <p className="hero-sub fade-up d2">
+            Upload any file from any mine — drill holes, financials,
+            satellite imagery, CAD drawings, permits, photographs.
+            Extract reads all of it and delivers a complete engineering
+            and commercial assessment.
+          </p>
+          <div className="hero-actions fade-up d3">
+            <button className="btn btn-primary btn-lg" onClick={scrollToWaitlist}>
+              Join the Waitlist
+            </button>
+            <button
+              className="btn btn-lg"
+              disabled
+              style={{ opacity: 0.5, cursor: 'default' }}
+            >
+              macOS &amp; Windows — Coming Soon
+            </button>
           </div>
-          <div className="hero-right">
-            <DrillHole />
+          <div className="file-tags fade-up d4">
+            {FILE_TYPES.map((f) => (
+              <span key={f} className="file-tag">{f}</span>
+            ))}
           </div>
         </header>
 
