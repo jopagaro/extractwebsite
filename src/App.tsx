@@ -1,6 +1,10 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import Accordion from './components/Accordion'
 import './index.css'
+
+const DL_MAC_ARM  = '/downloads/Extract-mac-arm.dmg'
+const DL_MAC_X64  = '/downloads/Extract-mac-intel.dmg'   // add when built
+const DL_WIN      = '/downloads/Extract-windows.exe'      // add when built
 
 const FEATURES = [
   {
@@ -111,17 +115,9 @@ function useReveal() {
 export default function App() {
   useReveal()
   const year = new Date().getFullYear()
-  const [email, setEmail] = useState('')
-  const [submitted, setSubmitted] = useState(false)
-  const waitlistRef = useRef<HTMLElement>(null)
 
-  function handleWaitlist(e: React.FormEvent) {
-    e.preventDefault()
-    if (email.trim()) setSubmitted(true)
-  }
-
-  function scrollToWaitlist() {
-    waitlistRef.current?.scrollIntoView({ behavior: 'smooth' })
+  function scrollToDownload() {
+    document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -131,12 +127,12 @@ export default function App() {
         <div className="nav-inner">
           <span className="nav-wordmark">Extract</span>
           <div className="nav-actions">
-            <button className="btn" onClick={scrollToWaitlist}>
-              Join Waitlist
+            <button className="btn" onClick={scrollToDownload}>
+              Download
             </button>
-            <button className="btn btn-primary" disabled style={{ opacity: 0.45, cursor: 'default' }}>
-              Download — Coming Soon
-            </button>
+            <a className="btn btn-primary" href={DL_MAC_ARM}>
+              Download for Mac
+            </a>
           </div>
         </div>
       </nav>
@@ -158,16 +154,12 @@ export default function App() {
             and commercial assessment.
           </p>
           <div className="hero-actions fade-up d3">
-            <button className="btn btn-primary btn-lg" onClick={scrollToWaitlist}>
-              Join the Waitlist
-            </button>
-            <button
-              className="btn btn-lg"
-              disabled
-              style={{ opacity: 0.5, cursor: 'default' }}
-            >
-              macOS &amp; Windows — Coming Soon
-            </button>
+            <a className="btn btn-primary btn-lg" href={DL_MAC_ARM}>
+              Download for macOS
+            </a>
+            <span className="btn btn-lg" style={{ opacity: 0.45, cursor: 'default' }}>
+              Windows — Coming Soon
+            </span>
           </div>
           <div className="file-tags fade-up d4">
             {FILE_TYPES.map((f) => (
@@ -196,9 +188,6 @@ export default function App() {
                   inconsistencies, identifies gaps, and surfaces the information
                   that matters — without requiring you to be a mining engineer to
                   understand what it finds.
-                </p>
-                <p>
-                  Everything runs locally. Your data never leaves your machine.
                 </p>
               </div>
             </div>
@@ -309,37 +298,27 @@ export default function App() {
             </div>
           </section>
 
-          {/* ── Waitlist CTA ─────────────────────────────────────────────── */}
-          <section
-            className="section cta-section reveal"
-            id="waitlist"
-            ref={waitlistRef}
-          >
+          {/* ── Download CTA ─────────────────────────────────────────────── */}
+          <section className="section cta-section reveal" id="download">
             <h2 className="cta-headline">
-              Be first when<br />Extract ships.
+              Download Extract.
             </h2>
             <p className="cta-sub">
-              Available for macOS and Windows. Join the waitlist and we'll
-              reach out when access opens.
+              Runs entirely on your machine. No account required.
+              Enter your own API key in Settings to get started.
             </p>
-            {submitted ? (
-              <p className="waitlist-confirm">You're on the list.</p>
-            ) : (
-              <form className="waitlist-form" onSubmit={handleWaitlist}>
-                <input
-                  className="waitlist-input"
-                  type="email"
-                  placeholder="your@email.com"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  required
-                />
-                <button type="submit" className="waitlist-submit">
-                  Join Waitlist
-                </button>
-              </form>
-            )}
-            <span className="cta-note">macOS · Windows · Private by default</span>
+            <div className="download-buttons">
+              <a className="btn btn-primary btn-lg" href={DL_MAC_ARM}>
+                macOS — Apple Silicon
+              </a>
+              <a className="btn btn-lg" href={DL_MAC_X64}>
+                macOS — Intel
+              </a>
+              <span className="btn btn-lg" style={{ opacity: 0.45, cursor: 'default' }}>
+                Windows — Coming Soon
+              </span>
+            </div>
+            <span className="cta-note">macOS 11+ · Windows 10+ · Private by default</span>
           </section>
 
         </main>

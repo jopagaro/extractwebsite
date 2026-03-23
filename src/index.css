@@ -538,45 +538,16 @@ a {
   max-width: 420px;
 }
 
-.waitlist-form {
+.download-buttons {
   display: flex;
-  gap: 0;
+  flex-wrap: wrap;
+  gap: 12px;
   margin-top: 8px;
-  border: 1px solid var(--rule);
+  justify-content: center;
 }
 
-.waitlist-input {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.06em;
-  padding: 13px 20px;
-  background: transparent;
-  border: none;
-  outline: none;
-  color: var(--ink);
-  width: 260px;
-}
-
-.waitlist-input::placeholder {
-  color: var(--stone);
-}
-
-.waitlist-submit {
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  padding: 13px 22px;
-  background: var(--ink);
-  color: var(--bone);
-  border: none;
-  cursor: pointer;
-  transition: background 0.2s;
-  white-space: nowrap;
-}
-
-.waitlist-submit:hover {
-  background: var(--graphite);
+.download-buttons .btn {
+  text-decoration: none;
 }
 
 .cta-note {
