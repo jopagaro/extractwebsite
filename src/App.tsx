@@ -4,7 +4,6 @@ import './index.css'
 
 const DL_MAC_ARM  = '/downloads/Extract-mac-arm.dmg'
 const DL_MAC_X64  = '/downloads/Extract-mac-intel.dmg'   // add when built
-const DL_WIN      = '/downloads/Extract-windows.exe'      // add when built
 
 const FEATURES = [
   {
