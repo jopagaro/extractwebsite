@@ -2,8 +2,8 @@ import { useEffect } from 'react'
 import Accordion from './components/Accordion'
 import './index.css'
 
-const DL_MAC_ARM  = '/downloads/Extract-mac-arm.dmg'
-const DL_MAC_X64  = '/downloads/Extract-mac-intel.dmg'   // add when built
+const DL_MAC_ARM  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_aarch64.dmg'
+const DL_MAC_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_x64.dmg'
 
 const FEATURES = [
   {
