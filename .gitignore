@@ -2,6 +2,3 @@ node_modules/
 dist/
 .DS_Store
 *.local
-
-# Binary downloads — upload to hosting manually, not via git
-public/downloads/
