@@ -4,6 +4,7 @@ import './index.css'
 
 const DL_MAC_ARM  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_aarch64.dmg'
 const DL_MAC_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_x64.dmg'
+const DL_WIN_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_x64-setup.exe'
 
 const FEATURES = [
   {
@@ -156,9 +157,9 @@ export default function App() {
             <a className="btn btn-primary btn-lg" href={DL_MAC_ARM}>
               Download for macOS
             </a>
-            <span className="btn btn-lg" style={{ opacity: 0.45, cursor: 'default' }}>
-              Windows — Coming Soon
-            </span>
+            <a className="btn btn-lg" href={DL_WIN_X64}>
+              Windows — x64
+            </a>
           </div>
           <div className="file-tags fade-up d4">
             {FILE_TYPES.map((f) => (
