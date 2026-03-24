@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import Accordion from './components/Accordion'
 import './index.css'
 
@@ -116,6 +116,14 @@ export default function App() {
   useReveal()
   const year = new Date().getFullYear()
 
+  // Detect visitor OS so we can highlight the right download button
+  const [os, setOs] = useState<'mac' | 'windows' | 'other'>('other')
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase()
+    if (ua.includes('win')) setOs('windows')
+    else if (ua.includes('mac')) setOs('mac')
+  }, [])
+
   function scrollToDownload() {
     document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })
   }
@@ -154,11 +162,11 @@ export default function App() {
             and commercial assessment.
           </p>
           <div className="hero-actions fade-up d3">
-            <a className="btn btn-primary btn-lg" href={DL_MAC_ARM}>
+            <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
               Download for macOS
             </a>
-            <a className="btn btn-lg" href={DL_WIN_X64}>
-              Windows — x64
+            <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
+              Download for Windows
             </a>
           </div>
           <div className="file-tags fade-up d4">
@@ -308,15 +316,15 @@ export default function App() {
               Enter your own API key in Settings to get started.
             </p>
             <div className="download-buttons">
-              <a className="btn btn-primary btn-lg" href={DL_MAC_ARM}>
+              <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
                 macOS — Apple Silicon
               </a>
-              <a className="btn btn-lg" href={DL_MAC_X64}>
+              <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_X64}>
                 macOS — Intel
               </a>
-              <span className="btn btn-lg" style={{ opacity: 0.45, cursor: 'default' }}>
-                Windows — Coming Soon
-              </span>
+              <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
+                Windows — x64
+              </a>
             </div>
             <span className="cta-note">macOS 11+ · Windows 10+ · Private by default</span>
           </section>
