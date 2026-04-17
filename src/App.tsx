@@ -2,9 +2,15 @@ import { useEffect, useState } from 'react'
 import Accordion from './components/Accordion'
 import './index.css'
 
-const DL_MAC_ARM  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_aarch64.dmg'
-const DL_MAC_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_x64.dmg'
-const DL_WIN_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_0.1.0_x64-setup.exe'
+// Base edition
+const DL_MAC_ARM  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_aarch64.dmg'
+const DL_MAC_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_x64.dmg'
+const DL_WIN_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_x64-setup.exe'
+
+// CAD+ edition (includes STEP/IGES/BREP + OMF/VTK geometry packs)
+const DL_CAD_MAC_ARM = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_aarch64.dmg'
+const DL_CAD_MAC_X64 = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_x64.dmg'
+const DL_CAD_WIN_X64 = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_x64-setup.exe'
 
 const FEATURES = [
   {
@@ -315,17 +321,65 @@ export default function App() {
               Runs entirely on your machine. No account required.
               Enter your own API key in Settings to get started.
             </p>
-            <div className="download-buttons">
-              <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
-                macOS — Apple Silicon
-              </a>
-              <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_X64}>
-                macOS — Intel
-              </a>
-              <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
-                Windows — x64
-              </a>
+
+            <div className="download-tiers">
+
+              {/* Base */}
+              <div className="download-tier">
+                <div className="download-tier-header">
+                  <span className="download-tier-name">Extract</span>
+                  <span className="download-tier-badge">Beta · Free · ~150 MB</span>
+                </div>
+                <ul className="download-tier-features">
+                  <li>PDF, Word, Excel, CSV, TXT</li>
+                  <li>PNG, JPG, TIFF (vision analysis)</li>
+                  <li>DXF / DWG technical drawings</li>
+                  <li>Full LLM extraction + report pipeline</li>
+                  <li>DCF economic model</li>
+                </ul>
+                <div className="download-buttons">
+                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
+                    macOS — Apple Silicon
+                  </a>
+                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_X64}>
+                    macOS — Intel
+                  </a>
+                  <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
+                    Windows — x64
+                  </a>
+                </div>
+              </div>
+
+              <div className="download-tier-divider" aria-hidden="true" />
+
+              {/* CAD+ */}
+              <div className="download-tier">
+                <div className="download-tier-header">
+                  <span className="download-tier-name">Extract + CAD Pack</span>
+                  <span className="download-tier-badge">Beta · Free · ~600 MB</span>
+                </div>
+                <ul className="download-tier-features">
+                  <li>Everything in Extract</li>
+                  <li>STEP, IGES, BREP solid model analysis</li>
+                  <li>OMF block models + VTK volumes</li>
+                  <li>OBJ / STL mesh geometry</li>
+                  <li>3D feature detection &amp; spatial analysis</li>
+                </ul>
+                <div className="download-buttons">
+                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_CAD_MAC_ARM}>
+                    macOS — Apple Silicon
+                  </a>
+                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_CAD_MAC_X64}>
+                    macOS — Intel
+                  </a>
+                  <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_CAD_WIN_X64}>
+                    Windows — x64
+                  </a>
+                </div>
+              </div>
+
             </div>
+
             <span className="cta-note">macOS 11+ · Windows 10+ · Private by default</span>
           </section>
 

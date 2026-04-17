@@ -558,6 +558,86 @@ a {
   color: var(--stone);
 }
 
+/* ─── Two-tier download layout ────────────────────────────────────────────── */
+
+.download-tiers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0;
+  justify-content: center;
+  align-items: flex-start;
+  width: 100%;
+  max-width: 860px;
+  margin-top: 8px;
+}
+
+.download-tier {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 20px;
+  flex: 1 1 320px;
+  padding: 36px 28px;
+}
+
+.download-tier-divider {
+  width: 1px;
+  background: var(--rule);
+  align-self: stretch;
+  flex-shrink: 0;
+}
+
+.download-tier-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+}
+
+.download-tier-name {
+  font-family: var(--font-mono);
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--ink);
+  letter-spacing: -0.01em;
+}
+
+.download-tier-badge {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--stone);
+  border: 1px solid var(--rule);
+  border-radius: 3px;
+  padding: 3px 8px;
+}
+
+.download-tier-features {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  text-align: left;
+}
+
+.download-tier-features li {
+  font-size: 13px;
+  color: var(--graphite);
+  line-height: 1.5;
+  padding-left: 14px;
+  position: relative;
+}
+
+.download-tier-features li::before {
+  content: '–';
+  position: absolute;
+  left: 0;
+  color: var(--stone);
+}
+
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
 
 .footer {
