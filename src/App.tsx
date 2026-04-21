@@ -7,7 +7,7 @@ const DL_MAC_ARM  = 'https://github.com/jopagaro/extract/releases/latest/downloa
 const DL_MAC_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_x64.dmg'
 const DL_WIN_X64  = 'https://github.com/jopagaro/extract/releases/latest/download/Extract_x64-setup.exe'
 
-// CAD+ edition (includes STEP/IGES/BREP + OMF/VTK geometry packs)
+// CAD+ edition
 const DL_CAD_MAC_ARM = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_aarch64.dmg'
 const DL_CAD_MAC_X64 = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_x64.dmg'
 const DL_CAD_WIN_X64 = 'https://github.com/jopagaro/extract/releases/latest/download/Extract-CAD_x64-setup.exe'
@@ -98,6 +98,7 @@ const FAQ_ITEMS = [
 
 const FILE_TYPES = ['PDF', 'DXF', 'DWG', 'CSV', 'XLS', 'TIF', 'PNG', 'JPG', 'SHP', 'LAS', 'DAT', 'XML']
 
+type OS = 'mac' | 'windows' | 'other'
 
 function useReveal() {
   useEffect(() => {
@@ -118,17 +119,52 @@ function useReveal() {
   }, [])
 }
 
+// Smart single-button download per tier — primary for detected OS, alt links below
+function TierDownload({ os, mac_arm, mac_x64, win }: {
+  os: OS
+  mac_arm: string
+  mac_x64: string
+  win: string
+}) {
+  if (os === 'windows') {
+    return (
+      <div className="tier-download">
+        <a className="btn btn-lg btn-primary" href={win}>Download for Windows</a>
+        <div className="tier-alts">
+          <a href={mac_arm}>macOS Apple Silicon</a>
+          <span>·</span>
+          <a href={mac_x64}>macOS Intel</a>
+        </div>
+      </div>
+    )
+  }
+  // mac or other — default to Apple Silicon
+  return (
+    <div className="tier-download">
+      <a className="btn btn-lg btn-primary" href={mac_arm}>Download for macOS</a>
+      <div className="tier-alts">
+        <a href={mac_x64}>Intel Mac</a>
+        <span>·</span>
+        <a href={win}>Windows</a>
+      </div>
+    </div>
+  )
+}
+
 export default function App() {
   useReveal()
   const year = new Date().getFullYear()
 
-  // Detect visitor OS so we can highlight the right download button
-  const [os, setOs] = useState<'mac' | 'windows' | 'other'>('other')
+  const [os, setOs] = useState<OS>('other')
   useEffect(() => {
     const ua = navigator.userAgent.toLowerCase()
     if (ua.includes('win')) setOs('windows')
     else if (ua.includes('mac')) setOs('mac')
   }, [])
+
+  // OS-aware nav download link
+  const navDownloadHref = os === 'windows' ? DL_WIN_X64 : DL_MAC_ARM
+  const navDownloadLabel = os === 'windows' ? 'Download for Windows' : 'Download for macOS'
 
   function scrollToDownload() {
     document.getElementById('download')?.scrollIntoView({ behavior: 'smooth' })
@@ -142,10 +178,10 @@ export default function App() {
           <span className="nav-wordmark">Extract</span>
           <div className="nav-actions">
             <button className="btn" onClick={scrollToDownload}>
-              Download
+              All downloads
             </button>
-            <a className="btn btn-primary" href={DL_MAC_ARM}>
-              Download for Mac
+            <a className="btn btn-primary" href={navDownloadHref}>
+              {navDownloadLabel}
             </a>
           </div>
         </div>
@@ -168,12 +204,12 @@ export default function App() {
             and commercial assessment.
           </p>
           <div className="hero-actions fade-up d3">
-            <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
-              Download for macOS
+            <a className="btn btn-lg btn-primary" href={navDownloadHref}>
+              {navDownloadLabel}
             </a>
-            <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
-              Download for Windows
-            </a>
+            <button className="btn btn-lg" onClick={scrollToDownload}>
+              All platforms
+            </button>
           </div>
           <div className="file-tags fade-up d4">
             {FILE_TYPES.map((f) => (
@@ -314,12 +350,10 @@ export default function App() {
 
           {/* ── Download CTA ─────────────────────────────────────────────── */}
           <section className="section cta-section reveal" id="download">
-            <h2 className="cta-headline">
-              Download Extract.
-            </h2>
+            <h2 className="cta-headline">Download Extract.</h2>
             <p className="cta-sub">
-              Runs entirely on your machine. No account required.
-              Enter your own API key in Settings to get started.
+              Free during beta. Runs privately on your machine.<br />
+              No data leaves your device.
             </p>
 
             <div className="download-tiers">
@@ -331,23 +365,11 @@ export default function App() {
                   <span className="download-tier-badge">Beta · Free · ~150 MB</span>
                 </div>
                 <ul className="download-tier-features">
-                  <li>PDF, Word, Excel, CSV, TXT</li>
-                  <li>PNG, JPG, TIFF (vision analysis)</li>
+                  <li>PDF, Word, Excel, CSV, images</li>
                   <li>DXF / DWG technical drawings</li>
-                  <li>Full LLM extraction + report pipeline</li>
-                  <li>DCF economic model</li>
+                  <li>Full report + economic model</li>
                 </ul>
-                <div className="download-buttons">
-                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_ARM}>
-                    macOS — Apple Silicon
-                  </a>
-                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_MAC_X64}>
-                    macOS — Intel
-                  </a>
-                  <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_WIN_X64}>
-                    Windows — x64
-                  </a>
-                </div>
+                <TierDownload os={os} mac_arm={DL_MAC_ARM} mac_x64={DL_MAC_X64} win={DL_WIN_X64} />
               </div>
 
               <div className="download-tier-divider" aria-hidden="true" />
@@ -360,22 +382,10 @@ export default function App() {
                 </div>
                 <ul className="download-tier-features">
                   <li>Everything in Extract</li>
-                  <li>STEP, IGES, BREP solid model analysis</li>
-                  <li>OMF block models + VTK volumes</li>
-                  <li>OBJ / STL mesh geometry</li>
-                  <li>3D feature detection &amp; spatial analysis</li>
+                  <li>STEP, IGES, BREP solid models</li>
+                  <li>OMF, VTK, OBJ, STL geometry</li>
                 </ul>
-                <div className="download-buttons">
-                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_CAD_MAC_ARM}>
-                    macOS — Apple Silicon
-                  </a>
-                  <a className={`btn btn-lg${os === 'mac' || os === 'other' ? ' btn-primary' : ''}`} href={DL_CAD_MAC_X64}>
-                    macOS — Intel
-                  </a>
-                  <a className={`btn btn-lg${os === 'windows' ? ' btn-primary' : ''}`} href={DL_CAD_WIN_X64}>
-                    Windows — x64
-                  </a>
-                </div>
+                <TierDownload os={os} mac_arm={DL_CAD_MAC_ARM} mac_x64={DL_CAD_MAC_X64} win={DL_CAD_WIN_X64} />
               </div>
 
             </div>

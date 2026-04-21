@@ -638,6 +638,41 @@ a {
   color: var(--stone);
 }
 
+.tier-download {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+}
+
+.tier-download .btn {
+  text-decoration: none;
+  width: 100%;
+  max-width: 260px;
+  text-align: center;
+}
+
+.tier-alts {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--stone);
+}
+
+.tier-alts a {
+  color: var(--graphite);
+  text-decoration: none;
+  border-bottom: 1px solid var(--rule);
+  padding-bottom: 1px;
+  transition: color 0.15s;
+}
+
+.tier-alts a:hover {
+  color: var(--ink);
+}
+
 /* ─── Footer ─────────────────────────────────────────────────────────────── */
 
 .footer {
